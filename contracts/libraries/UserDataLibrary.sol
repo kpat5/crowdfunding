@@ -7,6 +7,8 @@ library UserDataLibrary{
         address userAddress;
         uint128 registrationTime;
         uint64 appealCount;
+        uint256[] appealsOwned;
+        uint256[] appealsDonated;
         uint256 amountWithdrawn;
         uint256 amountDonated;
     }
@@ -17,6 +19,7 @@ library UserDataLibrary{
         self.appealCount=0;
         self.amountDonated=0;
         self.amountWithdrawn=0;
+        return true;
     }
     function _alreadyRegistered(User storage self) internal returns (bool){
         return self.registrationTime==uint(0);
