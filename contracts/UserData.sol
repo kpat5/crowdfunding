@@ -19,4 +19,27 @@ contract UserData{
         emit newUserRegistered(name,msg.sender);
         return true;
     }
+
+    function addOwnedAppeal(uint256 index) external alreadyRegistered() returns (bool){
+        allUsers[msg.sender].appealsOwned.push(index);
+        return true;
+    }
+
+    function addDonatedAppeal(uint256 index) external alreadyRegistered() returns (bool){
+        allUsers[msg.sender].appealsDonated.push(index);
+        return true;
+    }
+
+    function addAmtWithdrawn(uint256 amount) external alreadyRegistered() returns (bool)
+    {
+        allUsers[msg.sender].amountWithdrawn+=amount;
+        
+        return true;
+    }
+
+    function addAmtDonated(uint256 amount) external alreadyRegistered() returns (bool)
+    {
+        allUsers[msg.sender].amountDonated+=amount;
+        return true;
+    }
 }
