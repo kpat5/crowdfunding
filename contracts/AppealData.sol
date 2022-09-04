@@ -7,6 +7,7 @@ contract AppealData is UserData{
     using AppealLibrary for AppealLibrary.Appeal;
     mapping(uint256=>AppealLibrary.Appeal) public allAppeals;
     uint256 totalAppeals=0;
+    using UserDataLibrary for UserDataLibrary.User;
     UserData user=new UserData();
 
     event newAppealRegistered(uint256 index,string title,string description,address owner);
@@ -15,10 +16,16 @@ contract AppealData is UserData{
         require(allAppeals[index].amtNeeded<=0,"This appeal already exists");
         _;
     }
+    modifier _userIsRegistered()
+    {
+        require(!(allUsers[msg.sender].registrationTime==uint(0)),"This user does not exist");
+        _;
+    }
 
-    function addAppeal(string calldata title,string calldata description,uint256 amtNeeded) external _appealDoesNotExist(totalAppeals+1) returns (bool){
+    function addAppeal(string calldata title,string calldata description,uint256 amtNeeded) external _appealDoesNotExist(totalAppeals+1) _userIsRegistered returns (bool){
         totalAppeals++;
         allAppeals[totalAppeals]._createAppeal(title,description,amtNeeded,msg.sender);
         user.addOwnedAppeal(totalAppeals);
+        return true;
     }
 }

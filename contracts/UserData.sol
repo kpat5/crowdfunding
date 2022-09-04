@@ -14,6 +14,11 @@ contract UserData{
         _;
     }
 
+    modifier appealIsOwned(uint256 index){
+        require(allUsers[msg.sender]._isOwned(index),"This user does not own this appeal");
+        _;
+    }
+
     function addUser(string calldata name) external alreadyRegistered() returns (bool){
         allUsers[msg.sender]._register(name,msg.sender);
         emit newUserRegistered(name,msg.sender);
@@ -25,21 +30,22 @@ contract UserData{
         return true;
     }
 
-    function addDonatedAppeal(uint256 index) external alreadyRegistered() returns (bool){
-        allUsers[msg.sender].appealsDonated.push(index);
+    function addDonatedAppeal(uint256 index,uint256 amount) external alreadyRegistered() returns (bool){
+        allUsers[msg.sender].donated[index]=amount;
         return true;
     }
 
-    function addAmtWithdrawn(uint256 amount) external alreadyRegistered() returns (bool)
+    function addAmtWithdrawn(uint256 index,uint256 amount) external alreadyRegistered() appealIsOwned(index) returns (bool)
     {
-        allUsers[msg.sender].amountWithdrawn+=amount;
-        
+        allUsers[msg.sender].withdrawn[index]+=amount;
+        allUsers[msg.sender].totWithdrawn+=amount;
         return true;
     }
 
-    function addAmtDonated(uint256 amount) external alreadyRegistered() returns (bool)
+    function addAmtDonated(uint256 index,uint256 amount) external alreadyRegistered() returns (bool)
     {
-        allUsers[msg.sender].amountDonated+=amount;
+        allUsers[msg.sender].donated[index]+=amount;
+        allUsers[msg.sender].totDonated+=amount;       
         return true;
     }
 }
