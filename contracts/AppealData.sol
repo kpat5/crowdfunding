@@ -24,8 +24,15 @@ contract AppealData is UserData{
 
     function addAppeal(string calldata title,string calldata description,uint256 amtNeeded) external _appealDoesNotExist(totalAppeals+1) _userIsRegistered returns (bool){
         totalAppeals++;
-        allAppeals[totalAppeals]._createAppeal(title,description,amtNeeded,msg.sender);
+        allAppeals[totalAppeals]._createAppeal(title,description,amtNeeded,payable(msg.sender));
         user.addOwnedAppeal(totalAppeals);
+        return true;
+    }
+
+    function donate(uint256 appealNo) public payable _userIsRegistered returns (bool) {
+        require(msg.value>0,"Please send some ether");
+        
+        allAppeals[appealNo].owner.transfer(msg.value);
         return true;
     }
 }

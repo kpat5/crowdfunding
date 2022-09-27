@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 library AppealLibrary{
     struct Appeal{
         string title;
-        address owner;
+        address payable owner;
         string description;
         uint256 amtWithdrawn;
         mapping(address=>uint256) donors;
@@ -14,7 +14,7 @@ library AppealLibrary{
         uint128 creationTime;
     }
 
-    function _createAppeal(Appeal storage self,string calldata title,string calldata description,uint256 amtNeeded,address owner) internal returns (bool){
+    function _createAppeal(Appeal storage self,string calldata title,string calldata description,uint256 amtNeeded,address payable owner) internal returns (bool){
         self.title=title;
         self.owner=owner;
         self.description=description;
