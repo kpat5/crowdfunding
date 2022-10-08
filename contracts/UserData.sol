@@ -45,7 +45,7 @@ contract UserData{
     function addAmtDonated(uint256 index,uint256 amount) external alreadyRegistered() returns (bool)
     {
         allUsers[msg.sender].donated[index]+=amount;
-        allUsers[msg.sender].totDonated+=amount;       
+        allUsers[msg.sender].totDonated+=amount;
         return true;
     }
 }

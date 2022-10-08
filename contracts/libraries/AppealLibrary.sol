@@ -7,6 +7,7 @@ library AppealLibrary{
         address payable owner;
         string description;
         uint256 amtWithdrawn;
+        uint256 balance;
         mapping(address=>uint256) donors;
         uint256 amtNeeded;
         uint256 numOfDonations;
@@ -18,8 +19,8 @@ library AppealLibrary{
         self.title=title;
         self.owner=owner;
         self.description=description;
-        self.amtNeeded=amtNeeded;
-        self.amtAsked=amtNeeded;
+        self.amtNeeded=amtNeeded*(10**18);
+        self.amtAsked=amtNeeded*(10**18);
         self.amtWithdrawn=0;
         self.numOfDonations=0;
         self.creationTime=uint128(block.timestamp);

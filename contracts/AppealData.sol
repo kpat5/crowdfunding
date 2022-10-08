@@ -31,8 +31,22 @@ contract AppealData is UserData{
 
     function donate(uint256 appealNo) public payable _userIsRegistered returns (bool) {
         require(msg.value>0,"Please send some ether");
-        
-        allAppeals[appealNo].owner.transfer(msg.value);
+        require(msg.value<=allAppeals[appealNo].amtNeeded,"The amount sent exceeds the amount needed");
+        allAppeals[appealNo].balance+=msg.value;
+        if(allUsers[msg.sender].donated[appealNo]>0){
+            user.addDonatedAppeal(appealNo,msg.value);
+        }
+        else user.addAmtDonated(appealNo,msg.value);
+        allAppeals[appealNo].numOfDonations++; 
+        allAppeals[appealNo].amtNeeded-=msg.value;
+        return true;
+    }
+    function withdraw(uint256 appealNo) public payable _userIsRegistered returns (bool){
+        require(msg.sender==allAppeals[appealNo].owner,"You cannot withdraw as you are not the owner");
+        require(allAppeals[appealNo].balance>0,"You have already withdrawn ot no amount has been donated");
+        allAppeals[appealNo].owner.transfer(allAppeals[appealNo].balance);
+        user.addAmtWithdrawn(appealNo,allAppeals[appealNo].balance);
+        allAppeals[appealNo].balance=0;
         return true;
     }
 }
